@@ -3,11 +3,14 @@ package org.example.io;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL12;
+
 
 import java.nio.ByteBuffer;
 
 import static java.sql.Types.NULL;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Window {
     private long window;
@@ -44,16 +47,15 @@ public class Window {
 
         // Làm cho ngữ cảnh OpenGL hiện tại
         glfwMakeContextCurrent(window);
-
         // Khởi tạo khả năng OpenGL
         GL.createCapabilities();
-
         // Hiển thị cửa sổ
         glfwShowWindow(window);
-    }
 
-    public void update() {
-        glfwPollEvents();
+        glClearColor(1.0f,1.0f,1.0f,1.0f);
+        glEnable(GL_DEPTH_TEST);
+        System.out.println("OpenGL: " + glGetString(GL_VERSION));
+
     }
 
     public void swapBuffers() {

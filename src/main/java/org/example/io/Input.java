@@ -1,32 +1,19 @@
 package org.example.io;
 
+import org.lwjgl.glfw.GLFWKeyCallback;
+
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Input {
-    private long window;
-    private boolean keys[];
-    public Input(long window) {
-        this.window = window;
-        this.keys = new boolean[GLFW_KEY_LAST];
-        for (int i = 0; i < GLFW_KEY_LAST; i++) {
-            keys[i] = false;
-        }
+public class Input extends GLFWKeyCallback {
+
+    public static boolean[] keys = new boolean[65536];
+
+    public void invoke(long window, int key, int scancode, int action, int mods) {
+        keys[key] = action != GLFW_RELEASE;
     }
-    public boolean isKeyDown(int key) {
-        return (glfwGetKey(window, key) == 1);
+
+    public static boolean isKeyDown(int keycode) {
+        return keys[keycode];
     }
-    public boolean isMouseButtonDown(int button) {
-        return glfwGetMouseButton(window, button) == 1;
-    }
-    public boolean isKeyPressed(int key) {
-        return (isKeyDown(key) && !keys[key]);
-    }
-    public boolean isKeyReleased(int key) {
-        return (!isKeyDown(key) && keys[key]);
-    }
-    public void update() {
-        for (int i = GLFW_KEY_SPACE; i < GLFW_KEY_LAST; i++) {
-            keys[i] = isKeyDown(i);
-        }
-    }
+
 }
