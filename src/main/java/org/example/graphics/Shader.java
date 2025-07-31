@@ -38,7 +38,7 @@ public class Shader {
     public void setUniform2f(String name, Vector3f vector3f) {
         glUniform3f(getUniform(name), vector3f.x, vector3f.y, vector3f.z);
     }
-    public void setUniformMatrix4f(String name, Matrix4f matrix4f) {
+    public void setUniformMfatrix4f(String name, Matrix4f matrix4f) {
         glUniformMatrix4fv(getUniform(name), false, matrix4f.toFloatBuffer());
     }
     public void enable() {
