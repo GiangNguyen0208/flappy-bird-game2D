@@ -11,6 +11,9 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
+
+    public static final int VERTEX_ATTRIB = 0;
+    public static final int TCOORD_ATTRIB = 1;
     private final int ID;
     private Map<String, Integer> locationCache = new HashMap<String, Integer>();
     public Shader(String vertex, String fragment) {

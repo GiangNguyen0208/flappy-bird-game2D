@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
 public class Texture {
     private int width, height;
     private int texture;
@@ -39,16 +38,16 @@ public class Texture {
         }
 
         int result = glGenTextures();
-        bind(result);
+        glBindTexture(GL_TEXTURE_2D, result);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufferUtils.createIntBuffer(data));
-        unbind();
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         return result;
     }
-    public void bind(int result) {
-        glBindTexture(GL_TEXTURE_2D, result);
+    public void bind() {
+        glBindTexture(GL_TEXTURE_2D, texture);
     }
     public void unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
