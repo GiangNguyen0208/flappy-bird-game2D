@@ -1,5 +1,8 @@
 package org.example.io;
 
+import org.example.graphics.Shader;
+import org.example.level.Level;
+import org.example.maths.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -11,11 +14,12 @@ import java.nio.ByteBuffer;
 import static java.sql.Types.NULL;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 
 public class Window {
     private long window;
     private int width, height;
-
+    private Level level;
     public Window(int width, int height) {
         this.width = width;
         this.height = height;
@@ -45,17 +49,34 @@ public class Window {
             glfwSetWindowPos(window, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
         }
 
+        glfwSetKeyCallback(window, new Input());
+
         // Làm cho ngữ cảnh OpenGL hiện tại
         glfwMakeContextCurrent(window);
-        // Khởi tạo khả năng OpenGL
-        GL.createCapabilities();
         // Hiển thị cửa sổ
         glfwShowWindow(window);
+        // Khởi tạo khả năng OpenGL
+        GL.createCapabilities();
 
-        glClearColor(1.0f,1.0f,1.0f,1.0f);
+//        glClearColor(1.0f,1.0f,1.0f,1.0f);
         glEnable(GL_DEPTH_TEST);
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         System.out.println("OpenGL: " + glGetString(GL_VERSION));
+        Shader.loadAll();
 
+        Matrix4f pr_matrix = Matrix4f.orthographic(-10.0f, 10.0f, -10.0f * 9.0f / 16.0f, 10.0f * 9.0f / 16.0f, -1.0f, 1.0f);
+        Shader.BACK_GROUND.setUniformMatrix4f("pr_matrix", pr_matrix);
+        Shader.BACK_GROUND.setUniform1i("tex", 1);
+
+//        Shader.BIRD.setUniformMatrix4f("pr_matrix", pr_matrix);
+//        Shader.BIRD.setUniform1i("tex", 1);
+//
+//        Shader.PIPE.setUniformMatrix4f("pr_matrix", pr_matrix);
+//        Shader.PIPE.setUniform1i("tex", 1);
+
+        level = new Level();
     }
 
     public void swapBuffers() {
@@ -85,5 +106,9 @@ public class Window {
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 }
